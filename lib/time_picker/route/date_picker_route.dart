@@ -374,9 +374,9 @@ class _PickerState extends State<_PickerContentView> {
   void _setPicker(DateType dateType, int selectIndex) {
     // 得到新的选中的数据
     var selectValue = _dateTimeData.getListByName(dateType)[selectIndex];
+    // print('>>>>>_setPicker:${selectValue}');
     // 更新选中数据
     _selectData.setSingle(dateType, selectValue);
-
     switch (dateType) {
       case DateType.Year:
         _setYear();
@@ -742,6 +742,7 @@ class _PickerState extends State<_PickerContentView> {
     return Container(
       height: _pickerStyle.pickerHeight,
       color: _pickerStyle.backgroundColor,
+      // padding: EdgeInsets.symmetric(horizontal: 35),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: pickerList,
@@ -753,7 +754,7 @@ class _PickerState extends State<_PickerContentView> {
   Widget pickerView(DateType dateType) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
+        padding: EdgeInsets.zero,
         child: CupertinoPicker.builder(
           /// key ：年月拼接 就不会重复了 fixme
           /// 最好别使用key 会生成新的widget
@@ -768,13 +769,39 @@ class _PickerState extends State<_PickerContentView> {
           itemBuilder: (_, index) {
             String text =
                 '${_dateTimeData.getListByName(dateType)[index]}${widget.route.suffix?.getSingle(dateType)}';
+
+            AlignmentGeometry alignment = Alignment.center;
+            EdgeInsetsGeometry padding =  EdgeInsets.zero;
+
+            // var isSelect = false;
+            if (dateType == DateType.Year) {
+              alignment = Alignment.centerRight;
+              padding = EdgeInsets.only(right: 20);
+              // isSelect = text.endsWith(_selectData.year.toString());
+            } else if (dateType == DateType.Day) {
+              alignment = Alignment.centerLeft;
+              padding = EdgeInsets.only(left: 20);
+              // isSelect = text.endsWith(_selectData.day.toString());
+            }else{
+              // isSelect = text.endsWith(_selectData.month.toString());
+            }
+
+
+
             return Align(
-                alignment: Alignment.center,
-                child: Text(text,
-                    style: TextStyle(
-                        color: _pickerStyle.textColor,
-                        fontSize: _pickerFontSize(text)),
-                    textAlign: TextAlign.start));
+              alignment: alignment,
+              child: Padding(
+                padding: padding,
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: _pickerStyle.textColor,
+                    fontSize: _pickerFontSize(text),
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+            );
           },
         ),
       ),

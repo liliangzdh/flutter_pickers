@@ -37,37 +37,24 @@ class _DatePickerPageState extends State<DatePickerPage> {
     return Scaffold(
       appBar: MyAppBar(title: '时间选择器'),
       body: ListView(
-        children: [
-          _item('年月日时分秒', DateMode.YMDHMS),
-          _item('年月日时分', DateMode.YMDHM),
-          _item('年月日时', DateMode.YMDH),
-          _item('年月日', DateMode.YMD),
-          _item('年月', DateMode.YM),
-          _item('年', DateMode.Y),
-          _item('月日时分秒', DateMode.MDHMS),
-          _item('时分秒', DateMode.HMS),
-          _item('月日', DateMode.MD),
-          _item('月', DateMode.S),
-          _item('仿计时器', DateMode.HMS),
-          demo(),
-          SizedBox(height: 80)
-        ],
+        children: [_item('年月日', DateMode.YMD), demo(), SizedBox(height: 80)],
       ),
     );
   }
 
   Widget demo() {
     return TextButton(
-        onPressed: () {
-          Pickers.showDatePicker(
-            context,
-            onConfirm: (p) {
-              print('longer >>> 返回数据：$p');
-            },
-            // onChanged: (p) => print(p),
-          );
-        },
-        child: Text('Demo'));
+      onPressed: () {
+        Pickers.showDatePicker(
+          context,
+          onConfirm: (p) {
+            print('longer >>> 返回数据：$p');
+          },
+          // onChanged: (p) => print(p),
+        );
+      },
+      child: Text('Demo'),
+    );
   }
 
   Widget _item(title, model) {
@@ -103,55 +90,53 @@ class _DatePickerPageState extends State<DatePickerPage> {
   void _onClickItem(model) {
     Pickers.showDatePicker(
       context,
-      mode: model,
-      suffix: Suffix.normal(),
-
-      // selectDate: PDuration(month: 2),
-      minDate: PDuration(year: 2020, month: 2, day: 10),
-      maxDate: PDuration(second: 22),
-
-      // selectDate: PDuration(hour: 18, minute: 36, second: 36),
-      // minDate: PDuration(hour: 12, minute: 38, second: 3),
-      // maxDate: PDuration(hour: 12, minute: 40, second: 36),
+      suffix: Suffix(years: '', month: ''),
+      pickerStyle: PickerStyle(
+        pickerHeight: 266,
+        pickerTitleHeight: 60,
+        pickerItemHeight: 80,
+        // menuHeight: 40,
+        textColor: Color(0xFF8F9BA0),
+        headDecoration: const BoxDecoration(
+          color:Color(0xFFffffff),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(24),
+            topLeft: Radius.circular(24),
+          ),
+        ),
+        cancelButton: Padding(
+          padding: const EdgeInsets.only(left: 14, top: 15),
+          child: Text(
+            '取消',
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF999999),
+            ),
+          ),
+        ),
+        commitButton: Padding(
+          padding: const EdgeInsets.only(right: 14, top: 15),
+          child: Text(
+            '确定',
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF0BC5A5),
+            ),
+          ),
+        ),
+        itemOverlay: Container(
+          decoration:  BoxDecoration(
+            border: Border.symmetric(
+              horizontal: BorderSide(
+                color: Color(0xFFBCE7E0),
+                width: 1,
+              ),
+            ),
+          ),
+        ),
+      ),
       onConfirm: (p) {
         print('longer >>> 返回数据：$p');
-        setState(() {
-          switch (model) {
-            case DateMode.YMDHMS:
-              selectData[model] =
-                  '${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}';
-              break;
-            case DateMode.YMDHM:
-              selectData[model] =
-                  '${p.year}-${p.month}-${p.day} ${p.hour}:${p.minute}';
-              break;
-            case DateMode.YMDH:
-              selectData[model] = '${p.year}-${p.month}-${p.day} ${p.hour}';
-              break;
-            case DateMode.YMD:
-              selectData[model] = '${p.year}-${p.month}-${p.day}';
-              break;
-            case DateMode.YM:
-              selectData[model] = '${p.year}-${p.month}';
-              break;
-            case DateMode.Y:
-              selectData[model] = '${p.year}-${p.month}';
-              break;
-            case DateMode.MDHMS:
-              selectData[model] =
-                  '${p.month}-${p.day} ${p.hour}:${p.minute}:${p.second}';
-              break;
-            case DateMode.HMS:
-              selectData[model] = '${p.hour}:${p.minute}:${p.second}';
-              break;
-            case DateMode.MD:
-              selectData[model] = '${p.month}-${p.day}';
-              break;
-            case DateMode.S:
-              selectData[model] = '${p.second}';
-              break;
-          }
-        });
       },
       // onChanged: (p) => print(p),
     );
